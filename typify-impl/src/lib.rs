@@ -109,6 +109,7 @@ pub struct TypeStructPropInfo<'a> {
     pub description: Option<&'a str>,
     pub required: bool,
     pub type_id: TypeId,
+    pub rename: Option<&'a str>,
 }
 
 /// Newtype details.
@@ -896,6 +897,10 @@ impl<'a> TypeStruct<'a> {
                 description: prop.description.as_deref(),
                 required: matches!(&prop.state, StructPropertyState::Required),
                 type_id: prop.type_id.clone(),
+                rename: match &prop.rename {
+                    type_entry::StructPropertyRename::Rename(s) => Some(s),
+                    type_entry::StructPropertyRename::None | type_entry::StructPropertyRename::Flatten => None,
+                }
             })
     }
 }
